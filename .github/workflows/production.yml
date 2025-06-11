@@ -17,14 +17,14 @@ jobs:
 
       - name: Get latest tag (PowerShell)
         id: get_tag
-        shell: pwsh
+        shell: powershell
         run: |
           $latestTag = git describe --tags (git rev-list --tags --max-count=1)
           echo "Latest tag is: $latestTag"
           echo "tag=$latestTag" >> $env:GITHUB_OUTPUT
 
       - name: Checkout latest tag
-        shell: pwsh
+        shell: powershell
         run: |
           git checkout ${{ steps.get_tag.outputs.tag }}
 
