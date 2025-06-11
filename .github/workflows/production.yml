@@ -29,5 +29,5 @@ jobs:
           git checkout ${{ steps.get_tag.outputs.tag }}
 
       - name: Confirm current HEAD
-        shell: pwsh
+        shell: powershell
         run: git log -1 --oneline
