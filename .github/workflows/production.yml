@@ -1,0 +1,33 @@
+name: Checkout Latest Tag (Windows)
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  checkout-latest-tag:
+    runs-on: self-hosted  # Windows self-hosted runner
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Needed to get full git history and tags
+
+      - name: Get latest tag (PowerShell)
+        id: get_tag
+        shell: powershell
+        run: |
+          $latestTag = git describe --tags (git rev-list --tags --max-count=1)
+          echo "Latest tag is: $latestTag"
+          echo "tag=$latestTag" >> $env:GITHUB_OUTPUT
+
+      - name: Checkout latest tag
+        shell: powershell
+        run: |
+          git checkout ${{ steps.get_tag.outputs.tag }}
+
+      - name: Confirm current HEAD
+        shell: powershell
+        run: git log -1 --oneline
